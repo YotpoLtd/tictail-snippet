@@ -1,36 +1,39 @@
 <script>
-var addWidgetAndBottomLine = function() {
+
+var yotpoApp = {};
+yotpoApp.addWidgetAndBottomLine = function() {
     
     var widget_html = "{{#product_page}}{{#product}}<div class='yotpo reviews html_content' data-appkey='" + window.yotpo_app_key + "' data-domain='{{store_subdomain}}' data-product-id='{{ identifier }}' data-product-models='{{ identifier }}' data-name='{{title}}' data-url='{{absolute_url}}' data-image-url='http:{{#primary_image}}{{url-300}}{{/primary_image}}' data-description='{{title}}' </div>{{/product}}{{/product_page}}";     
     jQuery( ".tictail_add_to_cart_button" ).parents('#product_info').append(widget_html);        
 }
 
-var safeConsole = function(message) {
+yotpoApp.safeConsole = function(message) {
   if(window.console) {
     console.log(message);
   }
 }
 
-var appKeyResponse = function(data) {
+yotpoApp.appKeyResponse = function(data) {
     if(data.status.code == 200) {
       if(data.response && data.response.app && data.response.app.app_key) {
         window.yotpo_app_key = data.response.app.app_key;
-        addWidgetAndBottomLine();
+        yotpoApp.addWidgetAndBottomLine();
         jQuery.getScript( 'https://www.yotpo.com/js/yQuery.js');
       }
       else {
-        safeConsole("Unable to find app key for store id '{{store_identifier}}' and host '" + window.location.hostname + "'");
+        yotpoApp.safeConsole("Unable to find app key for store id '{{store_identifier}}' and host '" + window.location.hostname + "'");
       }
     }
     else {
-      safeConsole('Unable to retrieve Yotpo app key');
+      yotpoApp.safeConsole('Unable to retrieve Yotpo app key');
     }
 }; 
-var getAppKey = function() {
-  jQuery.ajax({url:'https://api.yotpo.com/apps/show_by_account_platform/tictail/{{store_identifier}}', success: appKeyResponse, timeout: 2000, dataType: 'jsonp', type: 'GET', always: appKeyResponse});  
+
+yotpoApp.getAppKey = function() {
+  jQuery.ajax({url:'https://api.yotpo.com/apps/show_by_account_platform/tictail/{{store_identifier}}', success: yotpoApp.appKeyResponse, timeout: 2000, dataType: 'jsonp', type: 'GET', always: yotpoApp.appKeyResponse});  
 };
 
-var loadScript = function(url, callback) {
+yotpoApp.loadScript = function(url, callback) {
     var head = document.getElementsByTagName('head')[0]; 
     var js = document.createElement('script'); 
     js.async = true;  
@@ -51,14 +54,17 @@ var loadScript = function(url, callback) {
     }
 };
 (function() {
+  try{
     if(document.getElementById("yotpoCustomInstall") != null) {
-      loadScript('//www.yotpo.com/js/yQuery.js');
+      yotpoApp.loadScript('//www.yotpo.com/js/yQuery.js');
     }
     else if(typeof jQuery == 'undefined'){
-      loadScript('//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js', getAppKey); 
+      yotpoApp.loadScript('//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js', yotpoApp.getAppKey); 
     }
     else {
-      getAppKey();
+      yotpoApp.getAppKey();
     }
+  }
+  catch (e) {yotpoApp.safeConsole(e.message);}
 }());
 </script>
