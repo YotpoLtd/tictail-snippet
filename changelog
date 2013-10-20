@@ -1,0 +1,2 @@
+2013-10-20 Alon Braitstein
+1. Bug fix: when a product was out of stock, widget isn't displayed.
