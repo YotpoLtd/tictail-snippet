@@ -2,8 +2,9 @@
 
 var yotpoApp = {};
 yotpoApp.addWidgetAndBottomLine = function() {
-    
-    var widget_html = "{{#product_page}}{{#product}}<div class='yotpo reviews html_content' data-appkey='" + window.yotpo_app_key + "' data-domain='{{store_subdomain}}' data-product-id='{{ identifier }}' data-product-models='{{ identifier }}' data-name='{{title}}' data-url='{{absolute_url}}' data-image-url='http:{{#primary_image}}{{url-300}}{{/primary_image}}' data-description='{{title}}' </div>{{/product}}{{/product_page}}";     
+    var title_encoded = {{#product_page}}{{#product}}{{title_encoded}}{{/product}}{{/product_page}};
+    title_encoded = yotpoApp.encodeString(title_encoded);
+    var widget_html = "{{#product_page}}{{#product}}<div class='yotpo reviews html_content' data-appkey='" + window.yotpo_app_key + "' data-domain='{{store_subdomain}}' data-product-id='{{ identifier }}' data-product-models='{{ identifier }}' data-name='" + title_encoded + "' data-url='{{absolute_url}}' data-image-url='http:{{#primary_image}}{{url-300}}{{/primary_image}}' data-description='" + title_encoded + "' </div>{{/product}}{{/product_page}}";     
     widget_location = jQuery(".tictail_add_to_cart_button").parents('#product_info');
     if(widget_location.length == 0) {
        widget_location = jQuery(".out_of_stock").parents('#product_info'); 
@@ -14,6 +15,9 @@ yotpoApp.addWidgetAndBottomLine = function() {
     widget_location.append(widget_html);
 }
 
+yotpoApp.encodeString = function(string) {
+    return string.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 yotpoApp.safeConsole = function(message) {
   if(window.console) {
     console.log(message);
