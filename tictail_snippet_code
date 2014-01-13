@@ -4,6 +4,7 @@ var yotpoApp = {};
 yotpoApp.addWidgetAndBottomLine = function() {
     {{#product_page}}{{#product}}
     var title_encoded = {{title_encoded}};
+    title_encoded = yotpoApp.encodeString(title_encoded);
     {{/product}}{{/product_page}}
     if (typeof title_encoded === 'undefined') {
         var title_encoded = '';
