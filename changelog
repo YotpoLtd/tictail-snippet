@@ -3,3 +3,8 @@
 
 2013-12-23 Alon Braitstein
 1. Bug fix: products with title containning ' chars were breaking the javascript.
+
+2013-01-13 Alon Braitstein
+1. Load yQuery from //staticwww.yotpo.com/js/yQuery.js instead of https://www.yotpo.com/js/yQuery.js and use async tag.
+2. 0001583: Reviews tab appearing twice when set 'horizontal' 16457, this should prevent from the script to load twice.
+3. In main pages the js would break.

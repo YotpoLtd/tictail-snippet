@@ -2,8 +2,12 @@
 
 var yotpoApp = {};
 yotpoApp.addWidgetAndBottomLine = function() {
-    var title_encoded = {{#product_page}}{{#product}}{{title_encoded}}{{/product}}{{/product_page}};
-    title_encoded = yotpoApp.encodeString(title_encoded);
+    {{#product_page}}{{#product}}
+    var title_encoded = {{title_encoded}};
+    {{/product}}{{/product_page}}
+    if (typeof title_encoded === 'undefined') {
+        var title_encoded = '';
+    }
     var widget_html = "{{#product_page}}{{#product}}<div class='yotpo reviews html_content' data-appkey='" + window.yotpo_app_key + "' data-domain='{{store_subdomain}}' data-product-id='{{ identifier }}' data-product-models='{{ identifier }}' data-name='" + title_encoded + "' data-url='{{absolute_url}}' data-image-url='http:{{#primary_image}}{{url-300}}{{/primary_image}}' data-description='" + title_encoded + "' </div>{{/product}}{{/product_page}}";     
     widget_location = jQuery(".tictail_add_to_cart_button").parents('#product_info');
     if(widget_location.length == 0) {
@@ -29,7 +33,7 @@ yotpoApp.appKeyResponse = function(data) {
       if(data.response && data.response.app && data.response.app.app_key) {
         window.yotpo_app_key = data.response.app.app_key;
         yotpoApp.addWidgetAndBottomLine();
-        jQuery.getScript( 'https://www.yotpo.com/js/yQuery.js');
+        yotpoApp.loadScript('//staticwww.yotpo.com/js/yQuery.js',null)
       }
       else {
         yotpoApp.safeConsole("Unable to find app key for store id '{{store_identifier}}' and host '" + window.location.hostname + "'");
@@ -49,7 +53,7 @@ yotpoApp.loadScript = function(url, callback) {
     var js = document.createElement('script'); 
     js.async = true;  
     js.src = url;
-    head.parentNode.insertBefore(js, head);
+    head.appendChild(js);
     if(callback) {
       if (js.addEventListener) { 
         js.addEventListener('load', callback);
