@@ -32,7 +32,9 @@ yotpoApp.safeConsole = function(message) {
 yotpoApp.appKeyResponse = function(data) {
     if(data.status.code == 200) {
       if(data.response && data.response.app && data.response.app.app_key) {
-        yotpoApp.addWidgetAndBottomLine();
+        if(document.getElementById("yotpoCustomInstall") == null) {
+          yotpoApp.addWidgetAndBottomLine();
+        }        
         yotpoApp.loadScript('//staticw2.yotpo.com/' + data.response.app.app_key + '/widget.js',null);
       }
       else {
@@ -70,10 +72,7 @@ yotpoApp.loadScript = function(url, callback) {
 };
 (function() {
   try{
-    if(document.getElementById("yotpoCustomInstall") != null) {
-      yotpoApp.loadScript('//www.yotpo.com/js/yQuery.js');
-    }
-    else if(typeof jQuery == 'undefined'){
+    if(typeof jQuery == 'undefined'){
       yotpoApp.loadScript('//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js', yotpoApp.getAppKey); 
     }
     else {
