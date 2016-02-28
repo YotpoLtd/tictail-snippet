@@ -34,8 +34,8 @@ yotpoApp.appKeyResponse = function(data) {
       if(data.response && data.response.app && data.response.app.app_key) {
         if(document.getElementById("yotpoCustomInstall") == null) {
           yotpoApp.addWidgetAndBottomLine();
-        }        
-        yotpoApp.loadScript('//staticw2.yotpo.com/' + data.response.app.app_key + '/widget.js',null);
+        }
+        TT.loadScript('tt-yotpo-widget', '//staticw2.yotpo.com/' + data.response.app.app_key + '/widget.js', null);
       }
       else {
         yotpoApp.safeConsole("Unable to find app key for store id '{{store_identifier}}' and host '" + window.location.hostname + "'");
@@ -50,30 +50,10 @@ yotpoApp.getAppKey = function() {
   jQuery.ajax({url:'https://api.yotpo.com/apps/show_by_account_platform/tictail/{{store_identifier}}', success: yotpoApp.appKeyResponse, timeout: 2000, dataType: 'jsonp', type: 'GET', always: yotpoApp.appKeyResponse});  
 };
 
-yotpoApp.loadScript = function(url, callback) {
-    var head = document.getElementsByTagName('head')[0]; 
-    var js = document.createElement('script'); 
-    js.async = true;  
-    js.src = url;
-    head.appendChild(js);
-    if(callback) {
-      if (js.addEventListener) { 
-        js.addEventListener('load', callback);
-      } 
-      else {
-        js.onreadystatechange = function() { 
-          if (js.readyState in {loaded: 1, complete: 1}) {
-            js.onreadystatechange = null;
-            callback();
-          }
-        };
-      }
-    }
-};
 (function() {
   try{
-    if(typeof jQuery == 'undefined'){
-      yotpoApp.loadScript('//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js', yotpoApp.getAppKey); 
+    if(!TT.hasjQuery()){
+      TT.loadScript('tt-yotpo-jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js', yotpoApp.getAppKey);
     }
     else {
       yotpoApp.getAppKey();
