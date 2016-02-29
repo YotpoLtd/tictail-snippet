@@ -52,7 +52,7 @@ yotpoApp.getAppKey = function() {
 
 (function() {
   try{
-    if(!TT.hasjQuery()){
+    if(typeof jQuery == 'undefined'){
       TT.loadScript('tt-yotpo-jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js', yotpoApp.getAppKey);
     }
     else {
