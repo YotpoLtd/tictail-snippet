@@ -47,7 +47,7 @@ yotpoApp.appKeyResponse = function(data) {
 }; 
 
 yotpoApp.getAppKey = function() {
-  jQuery.ajax({url:'https://api.yotpo.com/apps/show_by_account_platform/tictail/{{store_identifier}}', success: yotpoApp.appKeyResponse, timeout: 2000, dataType: 'jsonp', type: 'GET', always: yotpoApp.appKeyResponse});  
+  jQuery.ajax({url:'https://api.yotpo.com/apps/show_by_account_platform/tictail/{{store_identifier}}', success: yotpoApp.appKeyResponse, timeout: 2000, type: 'GET', always: yotpoApp.appKeyResponse});
 };
 
 (function() {
